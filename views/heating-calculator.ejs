@@ -319,7 +319,7 @@
     var tr = document.createElement('tr');
     tr.innerHTML =
       '<td><input type="text" class="form-control" data-field="name" value="' + (d.name || '') + '"></td>' +
-      '<td><input type="number" class="form-control" data-field="qty" min="1" step="1" value="' + (d.qty || 1) + '" style="width:60px"></td>' +
+      '<td><input type="number" class="form-control" data-field="qty" min="1" max="50" step="1" value="' + (d.qty || 1) + '" style="width:60px"></td>' +
       '<td><input type="number" class="form-control" data-field="width" min="0" step="0.01" value="' + (d.width || 1.2) + '" style="width:80px"></td>' +
       '<td><input type="number" class="form-control" data-field="height" min="0" step="0.01" value="' + (d.height || 1.4) + '" style="width:80px"></td>' +
       '<td><select class="form-control" data-field="type">' + buildTypeOptions() + '</select></td>' +

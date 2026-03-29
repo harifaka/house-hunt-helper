@@ -44,8 +44,13 @@ router.post('/heating/save', async (req, res) => {
     }
 
     const calcId = id || crypto.randomUUID();
-    const paramsStr = typeof parameters === 'string' ? parameters : JSON.stringify(parameters);
-    const resultsStr = typeof results === 'string' ? results : JSON.stringify(results);
+    let paramsStr, resultsStr;
+    try {
+      paramsStr = typeof parameters === 'string' ? parameters : JSON.stringify(parameters);
+      resultsStr = typeof results === 'string' ? results : JSON.stringify(results);
+    } catch (_e) {
+      return res.status(400).json({ error: 'Invalid parameters or results format' });
+    }
 
     // Check if updating existing
     if (id) {
