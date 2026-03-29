@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: house-hunt-helper
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DATABASE_PATH
+        value: /var/data/house_hunt.sqlite
+    disk:
+      name: house-hunt-data
+      mountPath: /var/data
+      sizeGB: 1

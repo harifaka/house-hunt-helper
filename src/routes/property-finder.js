@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const PDFDocument = require('pdfkit');
 const { getDb } = require('../database');
 const { scrapeProperty, searchCity, calculatePriceStats } = require('../scraper');
@@ -124,7 +124,7 @@ router.post('/scrape', async (req, res) => {
     }
 
     const data = await scrapeProperty(url);
-    const id = uuidv4();
+    const id = crypto.randomUUID();
 
     db.prepare(`INSERT INTO scraped_properties (id, url, title, price, price_text, location, city, size_sqm, rooms, description, property_type, listing_id, image_urls, scraped_data)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
@@ -150,7 +150,7 @@ router.post('/scrape-demo', (req, res) => {
   const { url } = req.body;
   const db = getDb();
   try {
-    const id = uuidv4();
+    const id = crypto.randomUUID();
     const listingId = url ? url.split('/').filter(Boolean).pop() : 'demo-' + Date.now();
 
     // Generate realistic demo data
@@ -193,7 +193,7 @@ router.post('/search-city', async (req, res) => {
           .run(stats.avg, stats.median, city);
       } else {
         db.prepare(`INSERT INTO city_info (id, city_name, avg_price, median_price) VALUES (?, ?, ?, ?)`)
-          .run(uuidv4(), city, stats.avg, stats.median);
+          .run(crypto.randomUUID(), city, stats.avg, stats.median);
       }
     } finally {
       db.close();
@@ -228,7 +228,7 @@ router.post('/search-city-demo', (req, res) => {
         .run(cityData.population, cityData.gdpInfo, cityData.securityInfo, cityData.infrastructure, cityData.currentMayor, cityData.previousMayor, cityData.generalInfo, JSON.stringify(cityData.extraData), stats.avg, stats.median, city);
     } else {
       db.prepare(`INSERT INTO city_info (id, city_name, population, gdp_info, security_info, infrastructure, current_mayor, previous_mayor, general_info, extra_data, avg_price, median_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-        .run(uuidv4(), city, cityData.population, cityData.gdpInfo, cityData.securityInfo, cityData.infrastructure, cityData.currentMayor, cityData.previousMayor, cityData.generalInfo, JSON.stringify(cityData.extraData), stats.avg, stats.median);
+        .run(crypto.randomUUID(), city, cityData.population, cityData.gdpInfo, cityData.securityInfo, cityData.infrastructure, cityData.currentMayor, cityData.previousMayor, cityData.generalInfo, JSON.stringify(cityData.extraData), stats.avg, stats.median);
     }
   } finally {
     db.close();
@@ -250,7 +250,7 @@ router.post('/city-info', (req, res) => {
         .run(population || null, gdp_info || null, security_info || null, infrastructure || null, current_mayor || null, previous_mayor || null, general_info || null, city_name);
     } else {
       db.prepare(`INSERT INTO city_info (id, city_name, population, gdp_info, security_info, infrastructure, current_mayor, previous_mayor, general_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-        .run(uuidv4(), city_name, population || null, gdp_info || null, security_info || null, infrastructure || null, current_mayor || null, previous_mayor || null, general_info || null);
+        .run(crypto.randomUUID(), city_name, population || null, gdp_info || null, security_info || null, infrastructure || null, current_mayor || null, previous_mayor || null, general_info || null);
     }
 
     res.json({ success: true });
@@ -311,7 +311,7 @@ router.post('/report', (req, res) => {
 
   const db = getDb();
   try {
-    const id = uuidv4();
+    const id = crypto.randomUUID();
     const properties = propertyIds.length > 0
       ? db.prepare(`SELECT * FROM scraped_properties WHERE id IN (${propertyIds.map(() => '?').join(',')})`).all(...propertyIds)
       : [];
@@ -599,7 +599,7 @@ function generateDemoAnalysis(property, lang) {
   };
 }
 
-function generateDemoProperty(url, listingId) {
+function generateDemoProperty(url, _listingId) {
   const cities = ['Budapest', 'Debrecen', 'Szeged', 'Pécs', 'Győr'];
   const streets = ['Fő utca', 'Kossuth Lajos utca', 'Petőfi Sándor utca', 'Rákóczi út', 'Széchenyi tér'];
   const city = cities[Math.floor(Math.random() * cities.length)];

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getDb } = require('../database');
-const { getGroups, getAllQuestions, calculateScore } = require('../questions');
+const { getAllQuestions, calculateScore } = require('../questions');
 
 // GET /admin — Settings page
 router.get('/', (req, res) => {
