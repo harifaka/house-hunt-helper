@@ -67,35 +67,45 @@
               <% }); %>
             </div>
 
-            <!-- Notes -->
-            <div class="form-group mt-3">
-              <textarea name="notes_<%= q.id %>"
-                        class="form-control quiz-notes-input"
-                        rows="2"
-                        placeholder="<%= t.add_notes %>"
-                        data-house-id="<%= house.id %>"
-                        data-question-id="<%= q.id %>"><%= q.currentAnswer && q.currentAnswer.notes ? q.currentAnswer.notes : '' %></textarea>
+            <!-- Notes (hidden behind toggle) -->
+            <div class="mt-3">
+              <button type="button" class="btn btn-sm btn-ghost quiz-toggle-notes" data-target="notes-<%= q.id %>">
+                📝 <%= t.add_notes %><%= q.currentAnswer && q.currentAnswer.notes ? ' ✓' : '' %>
+              </button>
+              <div class="quiz-notes-wrapper" id="notes-<%= q.id %>" style="display:<%= q.currentAnswer && q.currentAnswer.notes ? 'block' : 'none' %>;">
+                <textarea name="notes_<%= q.id %>"
+                          class="form-control quiz-notes-input mt-2"
+                          rows="2"
+                          placeholder="<%= t.add_notes %>"
+                          data-house-id="<%= house.id %>"
+                          data-question-id="<%= q.id %>"><%= q.currentAnswer && q.currentAnswer.notes ? q.currentAnswer.notes : '' %></textarea>
+              </div>
             </div>
 
-            <!-- Image Upload -->
+            <!-- Image Upload (hidden behind toggle) -->
             <% if (q.allowImage) { %>
-              <div class="mt-3">
-                <% if (q.currentAnswer && q.currentAnswer.image_path) { %>
-                  <div class="mb-2">
-                    <img src="/uploads/<%= q.currentAnswer.image_path %>"
-                         alt="<%= q.text %>"
-                         style="max-width:100%; max-height:200px; border-radius:var(--radius); object-fit:cover;">
-                  </div>
-                <% } %>
-                <label class="quiz-upload" data-house-id="<%= house.id %>" data-question-id="<%= q.id %>">
-                  📷 <%= t.upload_image %>
-                  <input type="file"
-                         accept="image/*"
-                         style="display:none"
-                         class="quiz-image-input"
-                         data-house-id="<%= house.id %>"
-                         data-question-id="<%= q.id %>">
-                </label>
+              <div class="mt-2">
+                <button type="button" class="btn btn-sm btn-ghost quiz-toggle-image" data-target="image-<%= q.id %>">
+                  📷 <%= t.upload_image %><%= q.currentAnswer && q.currentAnswer.image_path ? ' ✓' : '' %>
+                </button>
+                <div class="quiz-image-wrapper" id="image-<%= q.id %>" style="display:<%= q.currentAnswer && q.currentAnswer.image_path ? 'block' : 'none' %>;">
+                  <% if (q.currentAnswer && q.currentAnswer.image_path) { %>
+                    <div class="mb-2 mt-2">
+                      <img src="/uploads/<%= q.currentAnswer.image_path %>"
+                           alt="<%= q.text %>"
+                           class="quiz-image-preview">
+                    </div>
+                  <% } %>
+                  <label class="quiz-upload mt-2" data-house-id="<%= house.id %>" data-question-id="<%= q.id %>">
+                    📷 <%= t.upload_image %>
+                    <input type="file"
+                           accept="image/*"
+                           style="display:none"
+                           class="quiz-image-input"
+                           data-house-id="<%= house.id %>"
+                           data-question-id="<%= q.id %>">
+                  </label>
+                </div>
               </div>
             <% } %>
           </div>
@@ -127,6 +137,29 @@
 <%- include('partials/scripts') %>
 <script>
 (function() {
+  // Toggle notes visibility
+  document.querySelectorAll('.quiz-toggle-notes').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = document.getElementById(this.dataset.target);
+      if (target) {
+        target.style.display = target.style.display === 'none' ? 'block' : 'none';
+        if (target.style.display === 'block') {
+          target.querySelector('textarea').focus();
+        }
+      }
+    });
+  });
+
+  // Toggle image upload visibility
+  document.querySelectorAll('.quiz-toggle-image').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = document.getElementById(this.dataset.target);
+      if (target) {
+        target.style.display = target.style.display === 'none' ? 'block' : 'none';
+      }
+    });
+  });
+
   // Auto-save on option change (AJAX)
   document.querySelectorAll('.quiz-option input[type="radio"]').forEach(function(radio) {
     radio.addEventListener('change', function() {

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+<div class="app">
+  <%- include('partials/header') %>
+  <%- include('partials/sidebar') %>
+  <main class="main-content">
+
+    <div class="error-page">
+      <div class="error-page__code"><%= statusCode %></div>
+      <h1 class="error-page__title"><%= message %></h1>
+      <p class="error-page__detail"><%= detail %></p>
+
+      <div class="error-page__actions">
+        <a href="/" class="btn btn-primary"><%= lang === 'en' ? 'Go Home' : 'Főoldal' %></a>
+        <a href="javascript:history.back()" class="btn btn-secondary"><%= lang === 'en' ? 'Go Back' : 'Vissza' %></a>
+      </div>
+
+      <% if (stack) { %>
+        <details class="error-page__stack">
+          <summary><%= lang === 'en' ? 'Stack Trace (Debug)' : 'Hiba részletei (Debug)' %></summary>
+          <pre><%= stack %></pre>
+        </details>
+      <% } %>
+    </div>
+
+    <%- include('partials/footer') %>
+  </main>
+</div>
+<%- include('partials/scripts') %>
+</body>
+</html>

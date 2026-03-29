@@ -177,21 +177,21 @@
         </div>
         <div class="card__body">
           <div class="export-options">
-            <a href="/api/houses/<%= house.id %>/export/pdf" class="export-option">
+            <a href="/api/export/<%= house.id %>/pdf" class="export-option">
               <div class="export-option__icon">📄</div>
               <div class="export-option__info">
                 <div class="export-option__title">PDF</div>
                 <div class="export-option__desc"><%= lang === 'en' ? 'Download full inspection report' : 'Teljes szemle jelentés letöltése' %></div>
               </div>
             </a>
-            <a href="/api/houses/<%= house.id %>/export/json" class="export-option">
+            <a href="/api/export/<%= house.id %>/json" class="export-option">
               <div class="export-option__icon">📋</div>
               <div class="export-option__info">
                 <div class="export-option__title">JSON</div>
                 <div class="export-option__desc"><%= lang === 'en' ? 'Export raw data' : 'Nyers adatok exportálása' %></div>
               </div>
             </a>
-            <a href="/api/houses/<%= house.id %>/export/csv" class="export-option">
+            <a href="/api/export/<%= house.id %>/csv" class="export-option">
               <div class="export-option__icon">📊</div>
               <div class="export-option__info">
                 <div class="export-option__title">CSV</div>
