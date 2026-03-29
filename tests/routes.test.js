@@ -1,4 +1,5 @@
 const request = require('supertest');
+const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
 
@@ -10,7 +11,7 @@ const app = require('../app');
 const { getDb } = require('../src/database');
 
 afterAll(() => {
-  try { fs.unlinkSync(TEST_DB_PATH); } catch (_e) { /* ignore */ }
+  if (fs.existsSync(TEST_DB_PATH)) fs.unlinkSync(TEST_DB_PATH);
 });
 
 describe('API Routes', () => {
@@ -19,7 +20,6 @@ describe('API Routes', () => {
   beforeAll(() => {
     const db = getDb();
     try {
-      const crypto = require('crypto');
       houseId = crypto.randomUUID();
       db.prepare('INSERT INTO houses (id, name, address, asking_price) VALUES (?, ?, ?, ?)')
         .run(houseId, 'API Test House', '789 API St', 40000000);

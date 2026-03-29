@@ -10,7 +10,7 @@ const app = require('../app');
 const { getDb } = require('../src/database');
 
 afterAll(() => {
-  try { fs.unlinkSync(TEST_DB_PATH); } catch (_e) { /* ignore */ }
+  if (fs.existsSync(TEST_DB_PATH)) fs.unlinkSync(TEST_DB_PATH);
 });
 
 describe('Home Routes', () => {

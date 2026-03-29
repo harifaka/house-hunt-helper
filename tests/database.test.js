@@ -8,7 +8,7 @@ process.env.DATABASE_PATH = TEST_DB_PATH;
 const { getDb, initDb, DB_PATH } = require('../src/database');
 
 afterAll(() => {
-  try { fs.unlinkSync(TEST_DB_PATH); } catch (_e) { /* ignore */ }
+  if (fs.existsSync(TEST_DB_PATH)) fs.unlinkSync(TEST_DB_PATH);
 });
 
 describe('Database', () => {
