@@ -330,6 +330,18 @@ async function initSqliteDb() {
         description TEXT,
         created_at TEXT DEFAULT (datetime('now'))
       );
+
+      CREATE TABLE IF NOT EXISTS audit_logs (
+        id TEXT PRIMARY KEY,
+        level TEXT NOT NULL DEFAULT 'info',
+        category TEXT NOT NULL,
+        event TEXT NOT NULL,
+        details TEXT,
+        ip_address TEXT,
+        user_agent TEXT,
+        duration_ms INTEGER,
+        created_at TEXT DEFAULT (datetime('now'))
+      );
     `);
 
     const answerCols = (await db.prepare('PRAGMA table_info(answers)').all()).map(c => c.name);
@@ -443,6 +455,18 @@ async function initPostgresDb() {
         image_hash TEXT NOT NULL UNIQUE,
         image_path TEXT NOT NULL,
         description TEXT,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS audit_logs (
+        id TEXT PRIMARY KEY,
+        level TEXT NOT NULL DEFAULT 'info',
+        category TEXT NOT NULL,
+        event TEXT NOT NULL,
+        details TEXT,
+        ip_address TEXT,
+        user_agent TEXT,
+        duration_ms INTEGER,
         created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       );
     `);

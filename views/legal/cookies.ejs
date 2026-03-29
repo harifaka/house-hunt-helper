@@ -1,0 +1,129 @@
+<%- include('../partials/head') %>
+</head>
+<body>
+<div class="app">
+  <%- include('../partials/header') %>
+  <%- include('../partials/sidebar') %>
+  <main class="main-content">
+    <div class="container" style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
+<% if (lang === 'en') { %>
+      <h1>Cookie Policy</h1>
+      <p><strong>Last updated:</strong> <%= new Date().toISOString().split('T')[0] %></p>
+
+      <h2>1. What Are Cookies</h2>
+      <p>Cookies are small text files stored on your device when you visit a website. They are widely used to make websites work more efficiently and to provide information to the site owners.</p>
+
+      <h2>2. Cookies We Use</h2>
+      <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--border-color, #ddd);">
+            <th style="text-align: left; padding: 0.5rem;">Cookie</th>
+            <th style="text-align: left; padding: 0.5rem;">Purpose</th>
+            <th style="text-align: left; padding: 0.5rem;">Duration</th>
+            <th style="text-align: left; padding: 0.5rem;">Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+            <td style="padding: 0.5rem;"><code>connect.sid</code></td>
+            <td style="padding: 0.5rem;">Session management (language preference)</td>
+            <td style="padding: 0.5rem;">24 hours</td>
+            <td style="padding: 0.5rem;">Essential</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+            <td style="padding: 0.5rem;"><code>cookie_consent</code></td>
+            <td style="padding: 0.5rem;">Remembers your cookie consent choice</td>
+            <td style="padding: 0.5rem;">1 year</td>
+            <td style="padding: 0.5rem;">Essential</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+            <td style="padding: 0.5rem;">Google AdSense cookies</td>
+            <td style="padding: 0.5rem;">Advertising personalization (when ads are active)</td>
+            <td style="padding: 0.5rem;">Varies</td>
+            <td style="padding: 0.5rem;">Third-party / Advertising</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. Essential Cookies</h2>
+      <p>These cookies are strictly necessary for the Application to function. They enable core features like language settings and cannot be disabled.</p>
+
+      <h2>4. Third-Party Cookies (Advertising)</h2>
+      <p>If Google AdSense or other advertising services are enabled, they may place cookies for ad serving and personalization. These cookies are governed by the respective third-party privacy policies.</p>
+      <p>You can manage ad personalization at <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</p>
+
+      <h2>5. Managing Cookies</h2>
+      <p>You can control and delete cookies through your browser settings. Note that disabling essential cookies may affect the Application's functionality.</p>
+      <ul>
+        <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer">Chrome</a></li>
+        <li><a href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer" target="_blank" rel="noopener noreferrer">Firefox</a></li>
+        <li><a href="https://support.apple.com/en-us/HT201265" target="_blank" rel="noopener noreferrer">Safari</a></li>
+      </ul>
+
+      <h2>6. Consent</h2>
+      <p>By clicking "Accept" on the cookie consent banner, you agree to the use of cookies as described in this policy. You can withdraw consent at any time by clearing your browser cookies.</p>
+
+<% } else { %>
+      <h1>Cookie szabályzat</h1>
+      <p><strong>Utolsó frissítés:</strong> <%= new Date().toISOString().split('T')[0] %></p>
+
+      <h2>1. Mik azok a cookie-k</h2>
+      <p>A cookie-k kis szöveges fájlok, amelyeket az eszközén tárolnak, amikor egy weboldalt látogat. Széles körben használják a weboldalak hatékonyabb működéséhez és információk szolgáltatásához az oldal tulajdonosai számára.</p>
+
+      <h2>2. Az általunk használt cookie-k</h2>
+      <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--border-color, #ddd);">
+            <th style="text-align: left; padding: 0.5rem;">Cookie</th>
+            <th style="text-align: left; padding: 0.5rem;">Cél</th>
+            <th style="text-align: left; padding: 0.5rem;">Időtartam</th>
+            <th style="text-align: left; padding: 0.5rem;">Típus</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+            <td style="padding: 0.5rem;"><code>connect.sid</code></td>
+            <td style="padding: 0.5rem;">Munkamenet kezelés (nyelvi beállítás)</td>
+            <td style="padding: 0.5rem;">24 óra</td>
+            <td style="padding: 0.5rem;">Lényeges</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+            <td style="padding: 0.5rem;"><code>cookie_consent</code></td>
+            <td style="padding: 0.5rem;">Cookie hozzájárulási választás megjegyzése</td>
+            <td style="padding: 0.5rem;">1 év</td>
+            <td style="padding: 0.5rem;">Lényeges</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+            <td style="padding: 0.5rem;">Google AdSense cookie-k</td>
+            <td style="padding: 0.5rem;">Hirdetés személyre szabás (ha a hirdetések aktívak)</td>
+            <td style="padding: 0.5rem;">Változó</td>
+            <td style="padding: 0.5rem;">Harmadik fél / Hirdetés</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. Lényeges cookie-k</h2>
+      <p>Ezek a cookie-k feltétlenül szükségesek az Alkalmazás működéséhez. Olyan alapvető funkciókat tesznek lehetővé, mint a nyelvi beállítások, és nem kapcsolhatók ki.</p>
+
+      <h2>4. Harmadik fél cookie-k (Hirdetés)</h2>
+      <p>Ha a Google AdSense vagy más hirdetési szolgáltatások engedélyezve vannak, cookie-kat helyezhetnek el a hirdetések kiszolgálásához és személyre szabásához. Ezekre a cookie-kra a vonatkozó harmadik fél adatvédelmi szabályzatai érvényesek.</p>
+      <p>A hirdetés személyre szabását a <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google hirdetési beállításainál</a> kezelheti.</p>
+
+      <h2>5. Cookie-k kezelése</h2>
+      <p>A cookie-kat a böngésző beállításain keresztül szabályozhatja és törölheti. Vegye figyelembe, hogy a lényeges cookie-k letiltása befolyásolhatja az Alkalmazás működését.</p>
+      <ul>
+        <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer">Chrome</a></li>
+        <li><a href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer" target="_blank" rel="noopener noreferrer">Firefox</a></li>
+        <li><a href="https://support.apple.com/en-us/HT201265" target="_blank" rel="noopener noreferrer">Safari</a></li>
+      </ul>
+
+      <h2>6. Hozzájárulás</h2>
+      <p>A cookie hozzájárulási banneren az "Elfogadom" gombra kattintva Ön elfogadja a cookie-k használatát a jelen szabályzatban leírtak szerint. A hozzájárulás bármikor visszavonható a böngésző cookie-k törlésével.</p>
+<% } %>
+    </div>
+    <%- include('../partials/footer') %>
+  </main>
+</div>
+<%- include('../partials/scripts') %>
+</body>
+</html>

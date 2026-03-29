@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const { getDb } = require('../database');
 const { getGroups, getGroupQuestions, getAllQuestions, calculateScore } = require('../questions');
+const { logger } = require('../logger');
 
 const storage = multer.diskStorage({
   destination: path.join(__dirname, '..', '..', 'uploads'),
@@ -173,6 +174,10 @@ router.post('/:houseId/answer', async (req, res) => {
       'INSERT OR REPLACE INTO answers (house_id, question_id, option_id, notes) VALUES (?, ?, ?, ?)'
     ).run(house.id, questionId, optionId || null, notes || null);
 
+    // Audit: log quiz answer
+    const meta = { ip: req.ip, ua: (req.headers['user-agent'] || '').substring(0, 255) };
+    logger.quizAnswer(house.id, questionId, optionId || null, meta).catch(() => {});
+
     res.json({ success: true });
   } finally {
     await db.close();
@@ -202,6 +207,10 @@ router.post('/:houseId/upload/:questionId', upload.single('image'), async (req, 
     }
 
     res.json({ success: true, filename: req.file.filename });
+
+    // Audit: log image upload
+    const meta = { ip: req.ip, ua: (req.headers['user-agent'] || '').substring(0, 255) };
+    logger.imageUploaded(house.id, req.params.questionId, req.file.filename, meta).catch(() => {});
   } finally {
     await db.close();
   }
@@ -221,15 +230,21 @@ router.post('/:houseId/:groupId', async (req, res) => {
       'INSERT OR REPLACE INTO answers (house_id, question_id, option_id, notes) VALUES (?, ?, ?, ?)'
     );
 
+    let answerCount = 0;
     await db.transaction(async () => {
       for (const q of group.questions) {
         const optionId = req.body['option_' + q.id] || null;
         const notes = req.body['notes_' + q.id] || null;
         if (optionId || notes) {
           await stmt.run(house.id, q.id, optionId, notes);
+          answerCount++;
         }
       }
     });
+
+    // Audit: log group save
+    const meta = { ip: req.ip, ua: (req.headers['user-agent'] || '').substring(0, 255) };
+    logger.quizGroupSave(house.id, req.params.groupId, answerCount, meta).catch(() => {});
 
     const dest = req.body.action === 'next' && req.body.nextGroup
       ? '/quiz/' + house.id + '/' + req.body.nextGroup
