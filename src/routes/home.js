@@ -90,15 +90,9 @@ router.get('/houses/:id', (req, res) => {
   try {
     const lang = req.lang;
     const house = db.prepare('SELECT * FROM houses WHERE id = ?').get(req.params.id);
-    if (!house) return res.status(404).render('home', {
-      pageTitle: '404',
-      currentPath: '/houses',
-      houses: [],
-      totalHouses: 0,
-      avgScore: 0,
-      completedCount: 0,
-      groups: []
-    });
+    if (!house) {
+      return res.redirect('/houses');
+    }
 
     const answers = db.prepare('SELECT * FROM answers WHERE house_id = ?').all(house.id);
     const totalQuestions = getAllQuestions(lang).length;
