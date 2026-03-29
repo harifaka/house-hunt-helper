@@ -2297,3 +2297,101 @@ select.form-control {
     grid-template-columns: 1fr;
   }
 }
+
+/* ----- Error Page ----- */
+.error-page {
+  text-align: center;
+  padding: var(--sp-16) var(--sp-4);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.error-page__code {
+  font-size: 6rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: var(--sp-4);
+  letter-spacing: -0.04em;
+}
+
+.error-page__title {
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: var(--sp-3);
+}
+
+.error-page__detail {
+  color: var(--gray-600);
+  font-size: var(--fs-base);
+  margin-bottom: var(--sp-8);
+  line-height: var(--lh-base);
+}
+
+.error-page__actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-8);
+}
+
+.error-page__stack {
+  text-align: left;
+  background: var(--gray-900);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: var(--sp-8);
+}
+
+.error-page__stack summary {
+  cursor: pointer;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--gray-800);
+  color: var(--gray-300);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  user-select: none;
+}
+
+.error-page__stack summary:hover {
+  background: var(--gray-700);
+}
+
+.error-page__stack pre {
+  padding: var(--sp-4);
+  color: var(--danger-light);
+  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: var(--lh-loose);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* ----- Quiz Widget Toggles ----- */
+.quiz-toggle-notes,
+.quiz-toggle-image {
+  font-size: var(--fs-sm);
+  color: var(--gray-600);
+  border: 1px dashed var(--gray-300);
+  border-radius: var(--radius);
+  padding: var(--sp-2) var(--sp-3);
+  transition: all var(--duration) var(--ease);
+}
+
+.quiz-toggle-notes:hover,
+.quiz-toggle-image:hover {
+  color: var(--primary);
+  border-color: var(--primary-light);
+  background: var(--primary-bg);
+}
+
+.quiz-image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: var(--radius);
+  object-fit: cover;
+}

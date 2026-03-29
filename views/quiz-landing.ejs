@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+<div class="app">
+  <%- include('partials/header') %>
+  <%- include('partials/sidebar') %>
+  <main class="main-content">
+
+    <h1 class="mb-2">📋 <%= t.quiz %></h1>
+    <p class="text-muted mb-6"><%= lang === 'en' ? 'Select a house to start or continue the inspection quiz.' : 'Válassz házat a szemle kérdőív indításához vagy folytatásához.' %></p>
+
+    <% if (houses.length === 0) { %>
+      <div class="card text-center p-8 animate-fade-in">
+        <div class="text-2xl mb-3">🏠</div>
+        <h3><%= t.no_houses %></h3>
+        <p class="text-muted mb-4"><%= t.add_first %></p>
+        <a href="/houses#add-house" class="btn btn-accent btn-lg">➕ <%= t.new_house %></a>
+      </div>
+    <% } else { %>
+      <div class="grid grid-2">
+        <% houses.forEach(function(house) { %>
+          <%
+            var scoreLevel = 'low';
+            if (house.overallScore >= 75) scoreLevel = 'great';
+            else if (house.overallScore >= 50) scoreLevel = 'good';
+            else if (house.overallScore >= 25) scoreLevel = 'medium';
+
+            var statusLabel = t.not_started;
+            var statusClass = 'text-muted';
+            if (house.progress === 100) { statusLabel = t.completed; statusClass = 'text-success'; }
+            else if (house.progress > 0) { statusLabel = t.in_progress; statusClass = 'text-warning'; }
+          %>
+          <div class="card card--clickable animate-slide-up">
+            <div class="card__header d-flex justify-between items-center">
+              <h3 class="card__title mb-0 truncate"><%= house.name %></h3>
+              <% if (house.answeredCount > 0) { %>
+                <span class="score-badge score-badge--sm" data-score-level="<%= scoreLevel %>"><%= house.overallScore %>%</span>
+              <% } %>
+            </div>
+            <div class="card__body">
+              <% if (house.address) { %>
+                <p class="text-muted text-sm mb-2">📍 <%= house.address %></p>
+              <% } %>
+              <div class="text-xs <%= statusClass %> mb-2"><%= statusLabel %></div>
+              <div class="d-flex justify-between items-center mb-1">
+                <span class="text-xs text-muted"><%= house.answeredCount %> / <%= house.totalQuestions %> <%= t.answered %></span>
+                <span class="text-xs text-muted"><%= house.progress %>%</span>
+              </div>
+              <div class="score-bar score-bar--sm mb-3">
+                <div class="score-bar__fill" data-score-level="<%= scoreLevel %>" style="width: <%= house.progress %>%"></div>
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <a href="/quiz/<%= house.id %>" class="btn btn-sm btn-primary">
+                  <%= house.answeredCount > 0 ? t.continue_quiz : t.start_quiz %>
+                </a>
+                <% if (house.answeredCount > 0) { %>
+                  <a href="/quiz/<%= house.id %>/results" class="btn btn-sm btn-secondary"><%= t.view_results %></a>
+                  <a href="/api/export/<%= house.id %>/pdf" class="btn btn-sm btn-outline">📄 PDF</a>
+                  <a href="/api/export/<%= house.id %>/json" class="btn btn-sm btn-outline">📋 JSON</a>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <%- include('partials/footer') %>
+  </main>
+</div>
+<%- include('partials/scripts') %>
+</body>
+</html>

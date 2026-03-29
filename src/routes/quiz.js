@@ -14,6 +14,32 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
+// GET /quiz — Quiz landing page (house selection)
+router.get('/', (req, res) => {
+  const db = getDb();
+  try {
+    const lang = req.lang;
+    const houses = db.prepare('SELECT * FROM houses ORDER BY created_at DESC').all();
+    const totalQuestions = getAllQuestions(lang).length;
+
+    const housesWithStats = houses.map(house => {
+      const answers = db.prepare('SELECT * FROM answers WHERE house_id = ?').all(house.id);
+      const answeredCount = answers.filter(a => a.option_id).length;
+      const { overallScore } = calculateScore(answers, lang);
+      const progress = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
+      return { ...house, answeredCount, totalQuestions, overallScore, progress };
+    });
+
+    res.render('quiz-landing', {
+      pageTitle: res.locals.t.quiz,
+      currentPath: '/quiz',
+      houses: housesWithStats
+    });
+  } finally {
+    db.close();
+  }
+});
+
 // GET /quiz/:houseId — Quiz overview (groups list with progress)
 router.get('/:houseId', (req, res) => {
   const db = getDb();

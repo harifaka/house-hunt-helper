@@ -33,6 +33,8 @@ app.use((req, res, next) => {
   }
   req.lang = req.session.lang || 'hu';
   res.locals.lang = req.lang;
+  // Full URL path for language switcher (preserves quiz paths etc.)
+  res.locals.currentUrl = req.path;
   res.locals.t = req.lang === 'en' ? {
     home: 'Home', quiz: 'Inspection Quiz', admin: 'Admin', houses: 'Houses',
     new_house: 'New House', score: 'Score', results: 'Results', save: 'Save',
@@ -129,6 +131,37 @@ app.get('/export', (req, res, next) => {
 app.get('/ai', (req, res, next) => {
   req.url = '/ai-analysis';
   require('./src/routes/admin').handle(req, res, next);
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).render('error', {
+    pageTitle: '404 — Not Found',
+    currentPath: req.path,
+    statusCode: 404,
+    message: res.locals.lang === 'en' ? 'Page not found' : 'Az oldal nem található',
+    detail: res.locals.lang === 'en'
+      ? `The requested URL ${req.originalUrl} was not found on this server.`
+      : `A kért URL (${req.originalUrl}) nem található a szerveren.`,
+    stack: null
+  });
+});
+
+// General error handler
+app.use((err, req, res, _next) => {
+  const statusCode = err.status || 500;
+  console.error(`[${new Date().toISOString()}] Error ${statusCode}: ${err.message}`);
+  console.error(err.stack);
+  res.status(statusCode).render('error', {
+    pageTitle: `${statusCode} — Error`,
+    currentPath: req.path,
+    statusCode,
+    message: statusCode === 500
+      ? (res.locals.lang === 'en' ? 'Internal Server Error' : 'Szerverhiba')
+      : err.message,
+    detail: err.message,
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack
+  });
 });
 
 // Start server only when run directly (not when imported for testing)
