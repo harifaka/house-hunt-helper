@@ -342,6 +342,38 @@ async function initSqliteDb() {
         duration_ms INTEGER,
         created_at TEXT DEFAULT (datetime('now'))
       );
+
+      CREATE TABLE IF NOT EXISTS house_images (
+        id TEXT PRIMARY KEY,
+        house_id TEXT NOT NULL,
+        filename TEXT NOT NULL,
+        caption TEXT,
+        sort_order INTEGER DEFAULT 0,
+        created_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY (house_id) REFERENCES houses(id) ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS heating_calculations (
+        id TEXT PRIMARY KEY,
+        house_id TEXT,
+        name TEXT NOT NULL,
+        parameters TEXT NOT NULL,
+        results TEXT NOT NULL,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY (house_id) REFERENCES houses(id) ON DELETE SET NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS window_door_templates (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        width REAL NOT NULL,
+        height REAL NOT NULL,
+        type TEXT NOT NULL DEFAULT 'double',
+        u_value REAL NOT NULL DEFAULT 2.8,
+        is_standard INTEGER DEFAULT 0,
+        created_at TEXT DEFAULT (datetime('now'))
+      );
     `);
 
     const answerCols = (await db.prepare('PRAGMA table_info(answers)').all()).map(c => c.name);
@@ -349,9 +381,38 @@ async function initSqliteDb() {
       await db.exec('ALTER TABLE answers ADD COLUMN image_description TEXT');
     }
 
+    const houseCols = (await db.prepare('PRAGMA table_info(houses)').all()).map(c => c.name);
+    if (!houseCols.includes('description')) {
+      await db.exec('ALTER TABLE houses ADD COLUMN description TEXT');
+    }
+    if (!houseCols.includes('source')) {
+      await db.exec("ALTER TABLE houses ADD COLUMN source TEXT DEFAULT 'manual'");
+    }
+
     const upsert = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
     await upsert.run('language', 'hu');
     await upsert.run('app_title', 'House Hunt');
+
+    // Seed standard window/door templates
+    const templateCount = await db.prepare('SELECT COUNT(*) as count FROM window_door_templates').get();
+    if (templateCount.count === 0) {
+      const templateInsert = db.prepare(
+        'INSERT INTO window_door_templates (id, name, width, height, type, u_value, is_standard) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      );
+      const templates = [
+        ['std_1', 'Standard window 120×150', 1.2, 1.5, 'double', 2.8, 1],
+        ['std_2', 'Standard window 90×150', 0.9, 1.5, 'double', 2.8, 1],
+        ['std_3', 'Standard window 60×60', 0.6, 0.6, 'double', 2.8, 1],
+        ['std_4', 'Large window 180×150', 1.8, 1.5, 'double', 2.8, 1],
+        ['std_5', 'Balcony door 90×210', 0.9, 2.1, 'double', 2.8, 1],
+        ['std_6', 'Front door 100×210', 1.0, 2.1, 'double', 2.8, 1],
+        ['std_7', 'Double front door 140×210', 1.4, 2.1, 'double', 2.8, 1],
+        ['std_8', 'Interior door 80×210', 0.8, 2.1, 'single', 5.8, 1]
+      ];
+      for (const t of templates) {
+        await templateInsert.run(...t);
+      }
+    }
   } finally {
     await db.close();
   }
@@ -469,13 +530,69 @@ async function initPostgresDb() {
         duration_ms INTEGER,
         created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       );
+
+      CREATE TABLE IF NOT EXISTS house_images (
+        id TEXT PRIMARY KEY,
+        house_id TEXT NOT NULL,
+        filename TEXT NOT NULL,
+        caption TEXT,
+        sort_order INTEGER DEFAULT 0,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (house_id) REFERENCES houses(id) ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS heating_calculations (
+        id TEXT PRIMARY KEY,
+        house_id TEXT,
+        name TEXT NOT NULL,
+        parameters TEXT NOT NULL,
+        results TEXT NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (house_id) REFERENCES houses(id) ON DELETE SET NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS window_door_templates (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        width DOUBLE PRECISION NOT NULL,
+        height DOUBLE PRECISION NOT NULL,
+        type TEXT NOT NULL DEFAULT 'double',
+        u_value DOUBLE PRECISION NOT NULL DEFAULT 2.8,
+        is_standard BOOLEAN DEFAULT false,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      );
     `);
 
     await db.exec('ALTER TABLE answers ADD COLUMN IF NOT EXISTS image_description TEXT');
 
+    await db.exec("ALTER TABLE houses ADD COLUMN IF NOT EXISTS description TEXT");
+    await db.exec("ALTER TABLE houses ADD COLUMN IF NOT EXISTS source TEXT DEFAULT 'manual'");
+
     const upsert = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
     await upsert.run('language', 'hu');
     await upsert.run('app_title', 'House Hunt');
+
+    // Seed standard window/door templates
+    const templateCount = await db.prepare('SELECT COUNT(*) as count FROM window_door_templates').get();
+    if (templateCount.count === 0) {
+      const templateInsert = db.prepare(
+        'INSERT INTO window_door_templates (id, name, width, height, type, u_value, is_standard) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      );
+      const templates = [
+        ['std_1', 'Standard window 120×150', 1.2, 1.5, 'double', 2.8, true],
+        ['std_2', 'Standard window 90×150', 0.9, 1.5, 'double', 2.8, true],
+        ['std_3', 'Standard window 60×60', 0.6, 0.6, 'double', 2.8, true],
+        ['std_4', 'Large window 180×150', 1.8, 1.5, 'double', 2.8, true],
+        ['std_5', 'Balcony door 90×210', 0.9, 2.1, 'double', 2.8, true],
+        ['std_6', 'Front door 100×210', 1.0, 2.1, 'double', 2.8, true],
+        ['std_7', 'Double front door 140×210', 1.4, 2.1, 'double', 2.8, true],
+        ['std_8', 'Interior door 80×210', 0.8, 2.1, 'single', 5.8, true]
+      ];
+      for (const t of templates) {
+        await templateInsert.run(...t);
+      }
+    }
   } finally {
     await db.close();
   }
