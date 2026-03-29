@@ -8,6 +8,7 @@ const rateLimit = require('express-rate-limit');
 const { getDb } = require('../database');
 const { getAllQuestions, getGroups, getGroupQuestions, calculateScore } = require('../questions');
 const { getAIConfig, generateReport, analyzeImage, computeImageHash } = require('../ai-service');
+const { logger } = require('../logger');
 
 // --- Helpers ---
 
@@ -60,6 +61,7 @@ function escapeCsvField(val) {
 // --- Export Endpoints ---
 
 router.get('/export/:houseId/json', async (req, res) => {
+  const startTime = Date.now();
   const lang = req.lang || 'hu';
   const data = await getHouseExportData(req.params.houseId, lang);
   if (!data) return res.status(404).json({ error: 'House not found' });
@@ -94,10 +96,13 @@ router.get('/export/:houseId/json', async (req, res) => {
 
   const filename = (data.house.name || 'house').replace(/[^a-zA-Z0-9_-]/g, '_');
   res.setHeader('Content-Disposition', `attachment; filename="${filename}_inspection.json"`);
+  const meta = { ip: req.ip, ua: (req.headers['user-agent'] || '').substring(0, 255) };
+  logger.reportGenerated('json', req.params.houseId, Date.now() - startTime, meta).catch(() => {});
   res.json(exportData);
 });
 
 router.get('/export/:houseId/csv', async (req, res) => {
+  const startTime = Date.now();
   const lang = req.lang || 'hu';
   const data = await getHouseExportData(req.params.houseId, lang);
   if (!data) return res.status(404).json({ error: 'House not found' });
@@ -122,10 +127,13 @@ router.get('/export/:houseId/csv', async (req, res) => {
   const filename = (data.house.name || 'house').replace(/[^a-zA-Z0-9_-]/g, '_');
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', `attachment; filename="${filename}_inspection.csv"`);
+  const meta = { ip: req.ip, ua: (req.headers['user-agent'] || '').substring(0, 255) };
+  logger.reportGenerated('csv', req.params.houseId, Date.now() - startTime, meta).catch(() => {});
   res.send('\uFEFF' + rows.join('\r\n'));
 });
 
 router.get('/export/:houseId/pdf', expensiveApiLimiter, async (req, res) => {
+  const startTime = Date.now();
   const lang = req.lang || 'hu';
   const data = await getHouseExportData(req.params.houseId, lang);
   if (!data) return res.status(404).json({ error: 'House not found' });
@@ -384,6 +392,8 @@ router.get('/export/:houseId/pdf', expensiveApiLimiter, async (req, res) => {
       );
   }
 
+  const meta = { ip: req.ip, ua: (req.headers['user-agent'] || '').substring(0, 255) };
+  logger.reportGenerated('pdf', req.params.houseId, Date.now() - startTime, meta).catch(() => {});
   doc.end();
 });
 
@@ -422,6 +432,7 @@ router.post('/ai/config', async (req, res) => {
 
 // POST /api/ai/analyze/:houseId — Start async AI analysis
 router.post('/ai/analyze/:houseId', async (req, res) => {
+  const startTime = Date.now();
   const lang = req.lang || 'hu';
   const data = await getHouseExportData(req.params.houseId, lang);
   if (!data) return res.status(404).json({ error: 'House not found' });
@@ -431,9 +442,14 @@ router.post('/ai/analyze/:houseId', async (req, res) => {
     return res.status(400).json({ error: lang === 'en' ? 'AI not configured. Please set up AI provider in settings.' : 'Az AI nincs konfigur\u00e1lva. K\u00e9rlek \u00e1ll\u00edtsd be az AI szolg\u00e1ltat\u00f3t a be\u00e1ll\u00edt\u00e1sokban.' });
   }
 
+  const meta = { ip: req.ip, ua: (req.headers['user-agent'] || '').substring(0, 255) };
+
   // Start async generation — don't await, return immediately
-  generateReport(req.params.houseId, data, lang).catch(err => {
+  generateReport(req.params.houseId, data, lang).then(() => {
+    logger.reportGenerated('ai_analysis', req.params.houseId, Date.now() - startTime, meta).catch(() => {});
+  }).catch(err => {
     console.error('[AI] Report generation failed:', err.message);
+    logger.error('report', 'ai_analysis_failed', { houseId: req.params.houseId, error: err.message }, meta).catch(() => {});
   });
 
   res.json({

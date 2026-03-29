@@ -2,13 +2,19 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const crypto = require('crypto');
-const { initDb } = require('./src/database');
+const { initDb, getDb } = require('./src/database');
+const { logger } = require('./src/logger');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize database
-const dbReady = initDb();
+// Initialize database, then logger
+const dbReady = initDb().then(() => {
+  logger.init(getDb);
+  // Run initial log cleanup, then schedule periodic cleanup (every 24h)
+  logger.cleanup();
+  setInterval(() => logger.cleanup(), 24 * 60 * 60 * 1000);
+});
 
 // View engine
 app.set('view engine', 'ejs');
@@ -125,8 +131,25 @@ app.use((req, res, next) => {
     add_row: 'Sor hozzáadása', remove_row: 'Sor törlése',
     property_finder: 'Ingatlan Kereső'
   };
+
+  // Cookie consent flag (read from cookie, not session — to work before consent)
+  res.locals.cookieConsent = req.headers.cookie && req.headers.cookie.includes('cookie_consent=accepted');
+
   next();
 });
+
+// Request logging middleware (non-blocking, fire-and-forget)
+app.use((req, res, next) => {
+  const meta = { ip: req.ip, ua: (req.headers['user-agent'] || '').substring(0, 255) };
+  // Skip static assets and favicon from logging
+  if (!req.path.startsWith('/css/') && !req.path.startsWith('/js/') && !req.path.startsWith('/favicon') && !req.path.startsWith('/uploads/')) {
+    logger.pageView(req.path, meta).catch(() => {});
+  }
+  next();
+});
+
+// Legal pages
+app.use('/legal', require('./src/routes/legal'));
 
 // Routes
 app.use('/', require('./src/routes/home'));
@@ -163,8 +186,11 @@ app.use((req, res) => {
 // General error handler
 app.use((err, req, res, _next) => {
   const statusCode = err.status || 500;
+  const meta = { ip: req.ip, ua: (req.headers['user-agent'] || '').substring(0, 255) };
   console.error(`[${new Date().toISOString()}] Error ${statusCode}: ${err.message}`);
   console.error(err.stack);
+  // Persist error to audit log (non-blocking)
+  logger.appError(statusCode, err.message, err.stack, meta).catch(() => {});
   res.status(statusCode).render('error', {
     pageTitle: `${statusCode} — Error`,
     currentPath: req.path,

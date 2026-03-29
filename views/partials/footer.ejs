@@ -1,4 +1,11 @@
 <footer class="text-center text-muted text-xs py-4">
   <%- include('ad-slot', { slot: 'footer' }) %>
+  <nav class="footer-legal" style="margin-bottom: 0.5rem;">
+    <a href="/legal/terms"><%= lang === 'en' ? 'Terms of Use' : 'Felhasználási feltételek' %></a>
+    <span style="margin: 0 0.25rem;">·</span>
+    <a href="/legal/privacy"><%= lang === 'en' ? 'Privacy Policy' : 'Adatvédelmi szabályzat' %></a>
+    <span style="margin: 0 0.25rem;">·</span>
+    <a href="/legal/cookies"><%= lang === 'en' ? 'Cookie Policy' : 'Cookie szabályzat' %></a>
+  </nav>
   <p>&copy; <%= new Date().getFullYear() %> <%= t.app_title %> &mdash; v1.0.0</p>
 </footer>

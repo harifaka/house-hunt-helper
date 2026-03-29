@@ -1,0 +1,173 @@
+<%- include('../partials/head') %>
+</head>
+<body>
+<div class="app">
+  <%- include('../partials/header') %>
+  <%- include('../partials/sidebar') %>
+  <main class="main-content">
+    <div class="container" style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
+<% if (lang === 'en') { %>
+      <h1>Privacy Policy &amp; GDPR</h1>
+      <p><strong>Last updated:</strong> <%= new Date().toISOString().split('T')[0] %></p>
+
+      <h2>1. Introduction</h2>
+      <p>This Privacy Policy explains how House Hunt ("the Application") collects, uses, and protects your personal data in accordance with the General Data Protection Regulation (GDPR) and applicable privacy laws.</p>
+
+      <h2>2. Data Controller</h2>
+      <p>The data controller is the administrator of this House Hunt instance. For contact information, please reach out through the application settings.</p>
+
+      <h2>3. Data We Collect</h2>
+      <h3>3.1 Property Data</h3>
+      <p>House names, addresses, asking prices, notes, and inspection answers you enter. This data is stored locally in the application database.</p>
+
+      <h3>3.2 Usage Data (Audit Logs)</h3>
+      <p>We collect audit logs for quality assurance and security purposes, including:</p>
+      <ul>
+        <li>Page visits (URL path, timestamp)</li>
+        <li>Quiz interactions (which answers were given, when)</li>
+        <li>Report generation events (type, duration)</li>
+        <li>Image uploads</li>
+        <li>IP address and user agent (browser identifier)</li>
+        <li>Application errors</li>
+      </ul>
+      <p><strong>Retention:</strong> Audit logs are automatically deleted after <strong><%= typeof logRetentionDays !== 'undefined' ? logRetentionDays : 30 %> days</strong>. This does not affect your property data, which is retained until you delete it.</p>
+
+      <h3>3.3 Session Data</h3>
+      <p>A session cookie is used to maintain your language preference. This cookie is httpOnly and expires after 24 hours.</p>
+
+      <h3>3.4 Cookie Consent</h3>
+      <p>A cookie is stored to remember your cookie consent preference. This cookie expires after 1 year.</p>
+
+      <h2>4. How We Use Your Data</h2>
+      <ul>
+        <li><strong>Property evaluations:</strong> To provide scoring, analysis, and reporting features.</li>
+        <li><strong>Audit logs:</strong> For quality assurance, security monitoring, and to enable big data analysis of application usage patterns.</li>
+        <li><strong>AI Analysis:</strong> If configured, property data may be sent to third-party AI services for analysis. This is optional and user-initiated.</li>
+      </ul>
+
+      <h2>5. Legal Basis for Processing</h2>
+      <ul>
+        <li><strong>Consent:</strong> By using the Application and accepting cookies, you consent to data processing.</li>
+        <li><strong>Legitimate interest:</strong> Audit logs and error tracking are maintained for application security and improvement.</li>
+      </ul>
+
+      <h2>6. Data Sharing</h2>
+      <p>Your data is not shared with third parties except:</p>
+      <ul>
+        <li><strong>AI Services:</strong> If you configure and use AI analysis, property data is sent to your chosen AI provider.</li>
+        <li><strong>Advertising:</strong> Google AdSense or similar services may use cookies for ad personalization. See their respective privacy policies.</li>
+      </ul>
+
+      <h2>7. Your Rights (GDPR)</h2>
+      <p>Under the GDPR, you have the right to:</p>
+      <ul>
+        <li><strong>Access</strong> your personal data</li>
+        <li><strong>Rectify</strong> inaccurate data</li>
+        <li><strong>Erase</strong> your data ("right to be forgotten")</li>
+        <li><strong>Restrict</strong> processing of your data</li>
+        <li><strong>Data portability</strong> — export your data (available via the Export feature)</li>
+        <li><strong>Object</strong> to processing based on legitimate interest</li>
+      </ul>
+      <p>To exercise these rights, contact the application administrator.</p>
+
+      <h2>8. Data Security</h2>
+      <p>We implement appropriate technical measures including:</p>
+      <ul>
+        <li>HttpOnly, secure session cookies</li>
+        <li>Rate limiting on sensitive endpoints</li>
+        <li>Input validation and sanitization</li>
+        <li>Automatic log cleanup</li>
+      </ul>
+
+      <h2>9. Third-Party Advertising (Google AdSense)</h2>
+      <p>This application may use Google AdSense for advertising. Google may use cookies to serve ads based on prior visits. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google's Ads Settings</a>.</p>
+
+      <h2>10. Changes to This Policy</h2>
+      <p>We may update this policy from time to time. Changes will be reflected by updating the "Last updated" date.</p>
+
+<% } else { %>
+      <h1>Adatvédelmi szabályzat és GDPR</h1>
+      <p><strong>Utolsó frissítés:</strong> <%= new Date().toISOString().split('T')[0] %></p>
+
+      <h2>1. Bevezetés</h2>
+      <p>Ez az Adatvédelmi Szabályzat elmagyarázza, hogyan gyűjti, használja és védi a House Hunt ("az Alkalmazás") az Ön személyes adatait az Általános Adatvédelmi Rendelet (GDPR) és az alkalmazandó adatvédelmi törvények szerint.</p>
+
+      <h2>2. Adatkezelő</h2>
+      <p>Az adatkezelő ennek a House Hunt példánynak az adminisztrátora. Elérhetőségért kérjük, vegye fel a kapcsolatot az alkalmazás beállításain keresztül.</p>
+
+      <h2>3. Gyűjtött adatok</h2>
+      <h3>3.1 Ingatlanadatok</h3>
+      <p>Az Ön által megadott ház nevek, címek, kért árak, megjegyzések és szemle válaszok. Ezek az adatok helyben, az alkalmazás adatbázisában kerülnek tárolásra.</p>
+
+      <h3>3.2 Használati adatok (Audit naplók)</h3>
+      <p>Minőségbiztosítási és biztonsági célokból audit naplókat gyűjtünk, beleértve:</p>
+      <ul>
+        <li>Oldallátogatások (URL útvonal, időbélyeg)</li>
+        <li>Kérdőív interakciók (milyen válaszok születtek, mikor)</li>
+        <li>Jelentés generálási események (típus, időtartam)</li>
+        <li>Képfeltöltések</li>
+        <li>IP cím és felhasználói ügynök (böngésző azonosító)</li>
+        <li>Alkalmazás hibák</li>
+      </ul>
+      <p><strong>Megőrzés:</strong> Az audit naplók automatikusan törlődnek <strong><%= typeof logRetentionDays !== 'undefined' ? logRetentionDays : 30 %> nap</strong> után. Ez nem érinti az ingatlanadatokat, amelyek mindaddig megőrződnek, amíg Ön nem törli őket.</p>
+
+      <h3>3.3 Munkamenet adatok</h3>
+      <p>Egy munkamenet cookie kerül felhasználásra a nyelvi beállítás megőrzéséhez. Ez a cookie httpOnly és 24 óra után lejár.</p>
+
+      <h3>3.4 Cookie hozzájárulás</h3>
+      <p>Egy cookie kerül tárolásra a cookie hozzájárulási preferencia megjegyzéséhez. Ez a cookie 1 év után jár le.</p>
+
+      <h2>4. Hogyan használjuk az adatokat</h2>
+      <ul>
+        <li><strong>Ingatlanértékelések:</strong> Pontozási, elemzési és jelentéskészítési funkciók biztosításához.</li>
+        <li><strong>Audit naplók:</strong> Minőségbiztosításhoz, biztonsági megfigyeléshez és az alkalmazás használati mintáinak big data elemzéséhez.</li>
+        <li><strong>AI elemzés:</strong> Ha konfigurálva van, az ingatlanadatok harmadik fél AI szolgáltatásoknak küldhetők elemzés céljából. Ez opcionális és felhasználó által kezdeményezett.</li>
+      </ul>
+
+      <h2>5. Az adatfeldolgozás jogalapja</h2>
+      <ul>
+        <li><strong>Hozzájárulás:</strong> Az Alkalmazás használatával és a cookie-k elfogadásával Ön hozzájárul az adatfeldolgozáshoz.</li>
+        <li><strong>Jogos érdek:</strong> Az audit naplók és hibakövetés az alkalmazás biztonsága és fejlesztése érdekében kerülnek fenntartásra.</li>
+      </ul>
+
+      <h2>6. Adatmegosztás</h2>
+      <p>Az Ön adatait nem osztjuk meg harmadik felekkel, kivéve:</p>
+      <ul>
+        <li><strong>AI szolgáltatások:</strong> Ha Ön konfigurálja és használja az AI elemzést, az ingatlanadatok az Ön által választott AI szolgáltatónak kerülnek küldésre.</li>
+        <li><strong>Hirdetés:</strong> A Google AdSense vagy hasonló szolgáltatások cookie-kat használhatnak a hirdetés személyre szabásához. Lásd a vonatkozó adatvédelmi szabályzataikat.</li>
+      </ul>
+
+      <h2>7. Az Ön jogai (GDPR)</h2>
+      <p>A GDPR alapján Önnek joga van:</p>
+      <ul>
+        <li><strong>Hozzáférni</strong> személyes adataihoz</li>
+        <li><strong>Helyesbíteni</strong> pontatlan adatokat</li>
+        <li><strong>Törölni</strong> adatait ("az elfeledtetéshez való jog")</li>
+        <li><strong>Korlátozni</strong> adatai feldolgozását</li>
+        <li><strong>Adathordozhatóság</strong> — adatai exportálása (elérhető az Exportálás funkción keresztül)</li>
+        <li><strong>Tiltakozni</strong> a jogos érdeken alapuló feldolgozás ellen</li>
+      </ul>
+      <p>Ezen jogok gyakorlásához lépjen kapcsolatba az alkalmazás adminisztrátorával.</p>
+
+      <h2>8. Adatbiztonság</h2>
+      <p>Megfelelő technikai intézkedéseket alkalmazunk, beleértve:</p>
+      <ul>
+        <li>HttpOnly, biztonságos munkamenet cookie-k</li>
+        <li>Sebességkorlátozás érzékeny végpontokon</li>
+        <li>Bemeneti validáció és szanitizálás</li>
+        <li>Automatikus naplótörlés</li>
+      </ul>
+
+      <h2>9. Harmadik fél hirdetések (Google AdSense)</h2>
+      <p>Ez az alkalmazás Google AdSense-t használhat hirdetésekhez. A Google cookie-kat használhat a korábbi látogatásokon alapuló hirdetések megjelenítéséhez. A személyre szabott hirdetésekből a <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google hirdetési beállításainál</a> léphet ki.</p>
+
+      <h2>10. A szabályzat módosítása</h2>
+      <p>Időnként frissíthetjük ezt a szabályzatot. A változások az "Utolsó frissítés" dátum frissítésével kerülnek tükrözésre.</p>
+<% } %>
+    </div>
+    <%- include('../partials/footer') %>
+  </main>
+</div>
+<%- include('../partials/scripts') %>
+</body>
+</html>

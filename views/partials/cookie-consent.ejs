@@ -1,0 +1,27 @@
+<% if (!cookieConsent) { %>
+<div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="<%= lang === 'en' ? 'Cookie consent' : 'Cookie hozzájárulás' %>">
+  <div class="cookie-banner__content">
+    <p class="cookie-banner__text">
+      <% if (lang === 'en') { %>
+        We use essential cookies to ensure the proper functioning of this application and audit logs for quality assurance.
+        By continuing to use this site, you agree to our
+        <a href="/legal/cookies">Cookie Policy</a>,
+        <a href="/legal/privacy">Privacy Policy</a>, and
+        <a href="/legal/terms">Terms of Use</a>.
+      <% } else { %>
+        Lényeges cookie-kat használunk az alkalmazás megfelelő működéséhez, valamint audit naplókat a minőségbiztosításhoz.
+        Az oldal további használatával elfogadja a
+        <a href="/legal/cookies">Cookie szabályzatot</a>,
+        <a href="/legal/privacy">Adatvédelmi szabályzatot</a> és a
+        <a href="/legal/terms">Felhasználási feltételeket</a>.
+      <% } %>
+    </p>
+    <form method="POST" action="/legal/cookie-consent" class="cookie-banner__actions">
+      <input type="hidden" name="redirect" value="<%= typeof currentUrl !== 'undefined' ? currentUrl : '/' %>">
+      <button type="submit" class="btn btn--primary cookie-banner__accept">
+        <%= lang === 'en' ? 'Accept' : 'Elfogadom' %>
+      </button>
+    </form>
+  </div>
+</div>
+<% } %>

@@ -1,0 +1,99 @@
+<%- include('../partials/head') %>
+</head>
+<body>
+<div class="app">
+  <%- include('../partials/header') %>
+  <%- include('../partials/sidebar') %>
+  <main class="main-content">
+    <div class="container" style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
+<% if (lang === 'en') { %>
+      <h1>Terms of Use</h1>
+      <p><strong>Last updated:</strong> <%= new Date().toISOString().split('T')[0] %></p>
+
+      <h2>1. Acceptance of Terms</h2>
+      <p>By accessing and using House Hunt ("the Application"), you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use the Application.</p>
+
+      <h2>2. Description of Service</h2>
+      <p>House Hunt is a professional property inspection and analysis tool. The Application allows users to evaluate properties through structured questionnaires, generate reports, use calculators, and optionally leverage AI-powered analysis.</p>
+
+      <h2>3. User Responsibilities</h2>
+      <ul>
+        <li>You are responsible for the accuracy of data you enter into the Application.</li>
+        <li>You agree not to use the Application for any unlawful purpose.</li>
+        <li>You are responsible for maintaining the confidentiality of any data stored.</li>
+      </ul>
+
+      <h2>4. Data and Content</h2>
+      <ul>
+        <li>All property data, inspection results, and reports you create belong to you.</li>
+        <li>The Application stores data locally or on configured databases and does not share your data with third parties unless you configure external services (e.g., AI providers).</li>
+        <li>Audit logs of user interactions are collected for quality and security purposes and are automatically deleted after the configured retention period (default: 30 days).</li>
+      </ul>
+
+      <h2>5. Third-Party Services</h2>
+      <ul>
+        <li>The Application may integrate with third-party AI services if configured by the user. Data sent to these services is governed by their respective privacy policies.</li>
+        <li>The Application may display advertisements through Google AdSense or similar services.</li>
+      </ul>
+
+      <h2>6. Disclaimer</h2>
+      <p>The Application is provided "as is" without warranties of any kind. Property evaluations, scores, and AI analyses are informational tools and should not be the sole basis for any property purchase or investment decision. Always consult qualified professionals.</p>
+
+      <h2>7. Limitation of Liability</h2>
+      <p>In no event shall the Application developers be liable for any indirect, incidental, special, consequential, or punitive damages arising out of your use of the Application.</p>
+
+      <h2>8. Changes to Terms</h2>
+      <p>We reserve the right to modify these terms at any time. Continued use of the Application after changes constitutes acceptance of the new terms.</p>
+
+      <h2>9. Contact</h2>
+      <p>For questions about these Terms, please contact the application administrator.</p>
+
+<% } else { %>
+      <h1>Felhasználási feltételek</h1>
+      <p><strong>Utolsó frissítés:</strong> <%= new Date().toISOString().split('T')[0] %></p>
+
+      <h2>1. Feltételek elfogadása</h2>
+      <p>A House Hunt ("az Alkalmazás") használatával Ön elfogadja a jelen Felhasználási Feltételeket. Ha nem ért egyet ezekkel a feltételekkel, kérjük, ne használja az Alkalmazást.</p>
+
+      <h2>2. A szolgáltatás leírása</h2>
+      <p>A House Hunt egy professzionális ingatlan szemle és elemző eszköz. Az Alkalmazás lehetővé teszi a felhasználók számára, hogy strukturált kérdőíveken keresztül értékeljék az ingatlanokat, jelentéseket készítsenek, kalkulátorokat használjanak, és opcionálisan AI-alapú elemzést vegyenek igénybe.</p>
+
+      <h2>3. Felhasználói felelősség</h2>
+      <ul>
+        <li>Ön felelős az Alkalmazásba bevitt adatok pontosságáért.</li>
+        <li>Vállalja, hogy nem használja az Alkalmazást jogellenes célra.</li>
+        <li>Ön felelős a tárolt adatok bizalmasságának megőrzéséért.</li>
+      </ul>
+
+      <h2>4. Adatok és tartalom</h2>
+      <ul>
+        <li>Az Ön által létrehozott ingatlanadatok, szemle eredmények és jelentések az Ön tulajdonát képezik.</li>
+        <li>Az Alkalmazás helyi vagy konfigurált adatbázisokon tárolja az adatokat, és nem osztja meg azokat harmadik felekkel, kivéve ha Ön külső szolgáltatásokat konfigurál (pl. AI szolgáltatók).</li>
+        <li>A felhasználói interakciók audit naplói minőségi és biztonsági célokból kerülnek gyűjtésre, és automatikusan törlődnek a beállított megőrzési időszak után (alapértelmezés: 30 nap).</li>
+      </ul>
+
+      <h2>5. Harmadik fél szolgáltatásai</h2>
+      <ul>
+        <li>Az Alkalmazás integrálható harmadik fél AI szolgáltatásaival, ha a felhasználó konfigurálja. Az ezeknek a szolgáltatásoknak küldött adatokra azok saját adatvédelmi szabályzatai vonatkoznak.</li>
+        <li>Az Alkalmazás hirdetéseket jeleníthet meg a Google AdSense vagy hasonló szolgáltatásokon keresztül.</li>
+      </ul>
+
+      <h2>6. Felelősség kizárása</h2>
+      <p>Az Alkalmazás "ahogy van" alapon kerül biztosításra, mindenféle garancia nélkül. Az ingatlanértékelések, pontszámok és AI elemzések tájékoztató jellegű eszközök, és nem képezhetik kizárólagos alapját semmilyen ingatlanvásárlási vagy befektetési döntésnek. Mindig konzultáljon szakemberekkel.</p>
+
+      <h2>7. Felelősség korlátozása</h2>
+      <p>Az Alkalmazás fejlesztői semmilyen esetben nem felelősek semmilyen közvetett, járulékos, speciális, következményes vagy büntető kártérítésért, amely az Alkalmazás használatából ered.</p>
+
+      <h2>8. A feltételek módosítása</h2>
+      <p>Fenntartjuk a jogot, hogy ezeket a feltételeket bármikor módosítsuk. Az Alkalmazás folyamatos használata a módosítások után az új feltételek elfogadását jelenti.</p>
+
+      <h2>9. Kapcsolat</h2>
+      <p>Ha kérdése van ezekkel a Feltételekkel kapcsolatban, kérjük, lépjen kapcsolatba az alkalmazás adminisztrátorával.</p>
+<% } %>
+    </div>
+    <%- include('../partials/footer') %>
+  </main>
+</div>
+<%- include('../partials/scripts') %>
+</body>
+</html>
