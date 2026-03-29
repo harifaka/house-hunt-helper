@@ -567,7 +567,7 @@
             "structure"
           ],
           "weight": 3,
-          "type": "single_choice",
+          "type": "multi_choice",
           "allowImage": true,
           "options": [
             {
@@ -1167,7 +1167,7 @@
             "attic"
           ],
           "weight": 3,
-          "type": "single_choice",
+          "type": "multi_choice",
           "allowImage": true,
           "options": [
             {
@@ -1213,7 +1213,7 @@
             "attic"
           ],
           "weight": 3,
-          "type": "single_choice",
+          "type": "multi_choice",
           "allowImage": true,
           "options": [
             {

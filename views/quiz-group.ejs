@@ -225,8 +225,15 @@
       var questionId = this.dataset.questionId;
       var notes = this.value;
       var form = document.getElementById('quiz-form');
-      var optionInput = form.querySelector('input[name="option_' + questionId + '"]:checked');
-      var optionId = optionInput ? optionInput.value : null;
+      var checkedInputs = form.querySelectorAll('input[name="option_' + questionId + '"]:checked');
+      var optionId = null;
+      if (checkedInputs.length > 1) {
+        var ids = [];
+        checkedInputs.forEach(function(ci) { ids.push(ci.value); });
+        optionId = ids.join(',');
+      } else if (checkedInputs.length === 1) {
+        optionId = checkedInputs[0].value;
+      }
 
       fetch('/quiz/' + houseId + '/answer', {
         method: 'POST',
