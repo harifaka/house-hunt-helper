@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const { getDb } = require('../database');
 const { getAllQuestions, calculateScore, getGroups } = require('../questions');
 
@@ -71,7 +71,7 @@ router.post('/houses', (req, res) => {
   const db = getDb();
   try {
     const { name, address, asking_price, notes } = req.body;
-    const id = uuidv4();
+    const id = crypto.randomUUID();
     const price = asking_price ? parseFloat(asking_price) : null;
 
     db.prepare(

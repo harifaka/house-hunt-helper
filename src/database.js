@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const Database = require('better-sqlite3');
 
-const DB_PATH = path.join(__dirname, '..', 'db', 'house_hunt.sqlite');
+const DB_PATH = process.env.DATABASE_PATH || path.join(__dirname, '..', 'db', 'house_hunt.sqlite');
 
 function getDb() {
   const dir = path.dirname(DB_PATH);

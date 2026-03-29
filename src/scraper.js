@@ -53,7 +53,7 @@ async function scrapeProperty(url) {
   // Size (square meters)
   let sizeSqm = null;
   const sizeText = $('[class*="area"], [class*="size"]').first().text().trim();
-  const sizeMatch = sizeText.match(/([\d,\.]+)\s*m²/);
+  const sizeMatch = sizeText.match(/([\d,.]+)\s*m²/);
   if (sizeMatch) {
     sizeSqm = parseFloat(sizeMatch[1].replace(',', '.'));
   }
@@ -99,7 +99,7 @@ async function scrapeProperty(url) {
       if (json['@type'] === 'Product' || json['@type'] === 'RealEstateListing' || json['@type'] === 'Residence') {
         structuredData = json;
       }
-    } catch (e) { /* ignore */ }
+    } catch (_e) { /* ignore */ }
   });
 
   // Try to get more data from structured data
@@ -199,13 +199,13 @@ function parsePrice(text) {
   const cleaned = text.replace(/\s/g, '').replace(/Ft|HUF|,-/gi, '').trim();
 
   // Handle "M Ft" format (millions)
-  const mMatch = cleaned.match(/([\d,\.]+)\s*M/i);
+  const mMatch = cleaned.match(/([\d,.]+)\s*M/i);
   if (mMatch) {
     return parseFloat(mMatch[1].replace(',', '.')) * 1000000;
   }
 
   // Handle plain numbers
-  const numStr = cleaned.replace(/[^\d,\.]/g, '');
+  const numStr = cleaned.replace(/[^\d,.]/g, '');
   if (!numStr) return null;
   const num = parseFloat(numStr.replace(/\./g, '').replace(',', '.'));
   return isNaN(num) ? null : num;

@@ -131,8 +131,11 @@ app.get('/ai', (req, res, next) => {
   require('./src/routes/admin').handle(req, res, next);
 });
 
-app.listen(PORT, () => {
-  console.log(`House Hunt running at http://localhost:${PORT}`);
-});
+// Start server only when run directly (not when imported for testing)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`House Hunt running at http://localhost:${PORT}`);
+  });
+}
 
 module.exports = app;
